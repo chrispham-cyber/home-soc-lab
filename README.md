@@ -6,6 +6,8 @@ caught. When the default rules missed something, I wrote and tested my own.
 
 Author: Chris Pham ([chrispham-cyber.github.io](https://chrispham-cyber.github.io))
 
+![Wazuh dashboard](screenshots/dashboard.png)
+
 ## Setup
 
 Three VMs on VMware Fusion, on an isolated NAT network. Everything runs on Apple

@@ -58,6 +58,8 @@ sudo bash wazuh-install.sh -a -i
 Installed the indexer, manager, Filebeat, and dashboard natively. No emulation,
 cluster came up green.
 
+![Wazuh install / setup](../screenshots/wazuh-setup.png)
+
 ## What I'd tell the next person on Apple Silicon
 
 - Skip the Wazuh Docker images. They're amd64 only.

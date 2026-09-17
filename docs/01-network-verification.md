@@ -36,4 +36,8 @@ Once I used the right flags, every path was clean (0% loss) in both directions
 between all three hosts. Windows replies came back with TTL 128, Linux with TTL 64,
 which is a quick way to tell the two apart.
 
-Screenshots of the cross-pings are in [../screenshots/](../screenshots/).
+Cross-pings from each host:
+
+![Kali pinging the others](../screenshots/kali-ping.png)
+![Ubuntu pinging the others](../screenshots/ubuntu-ping.png)
+![Windows pinging the others](../screenshots/windows-ping.png)
