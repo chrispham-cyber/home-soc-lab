@@ -11,15 +11,15 @@ progress tracker and the source material for the write-up.
 
 ## 1. Network sanity check
 
-- [ ] All 3 VMs powered on
-- [ ] Record IPs: Kali `ip a`, Ubuntu `ip a`, Windows `ipconfig`
-- [ ] `ping` works between all VMs (allow ICMP through Windows Firewall if needed)
+- [x] All 3 VMs powered on
+- [x] Record IPs: Kali `ip a`, Ubuntu `ip a`, Windows `ipconfig`
+- [x] `ping` works between all VMs (allow ICMP through Windows Firewall if needed)
 
 | VM       | IP address |
 |----------|------------|
-| Kali     |            |
-| Windows  |            |
-| Ubuntu   |            |
+| Kali     | 192.168.3.135           |
+| Windows  | 192.168.3.131           |
+| Ubuntu   | 192.168.3.132           |
 
 ## 2. Install Wazuh (on the Ubuntu server VM)
 
