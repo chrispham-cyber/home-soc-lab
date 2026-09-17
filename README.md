@@ -47,8 +47,8 @@ home-soc-lab/
 
 | Tactic              | Technique                    | Attack file | Detected? |
 |---------------------|------------------------------|-------------|-----------|
-| Reconnaissance      | Active Scanning (T1595)      | [01](attacks/01-nmap-scan.md) | ⬜ (pending Kali) |
-| Credential Access   | Brute Force (T1110)          | [02](attacks/02-ssh-bruteforce.md) | ⬜ (pending Kali) |
+| Reconnaissance      | Active Scanning (T1595)      | [01](attacks/01-nmap-scan.md) | ⚠️ gap — host-based SIEM, no net sensor |
+| Credential Access   | Brute Force (T1110)          | [02](attacks/02-ssh-bruteforce.md) | ✅ 5763 (lvl 10) |
 | Execution           | PowerShell / cmd (T1059)     | [04](attacks/04-windows-discovery-execution.md) | ✅ 92004/92032/92057 |
 | Execution           | Encoded PowerShell (T1059.001)| [04](attacks/04-windows-discovery-execution.md) | ✅ 92057 (lvl 12) |
 | Discovery           | Account Discovery (T1087)    | [04](attacks/04-windows-discovery-execution.md) | ✅ 92031 |
@@ -61,7 +61,8 @@ home-soc-lab/
 - [x] Wazuh SIEM deployed (native ARM64, all services green)
 - [x] Agents enrolled: Windows (Sysmon + agent, Active) + Ubuntu server (agent 000)
 - [x] Sysmon telemetry flowing; built-in detections firing
-- [ ] Attacks executed from Kali + custom detections written
-- [ ] Write-up published
+- [x] Attacks executed (Kali: nmap + SSH brute force; Windows: discovery/execution)
+- [x] Custom detection rule written + tested (100010, T1033)
+- [ ] Write-up published + repo pushed to GitHub
 
 🚧 In progress — see [docs/setup.md](docs/setup.md) for current step.
