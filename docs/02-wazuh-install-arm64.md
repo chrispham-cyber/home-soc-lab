@@ -1,11 +1,9 @@
-# Installing Wazuh on Apple Silicon (ARM64) — What Actually Worked
+# Getting Wazuh running on Apple Silicon (ARM64)
 
-The lab runs on VMware Fusion on an Apple Silicon Mac, so every VM is **ARM64
-(aarch64)**. This breaks the two "official" quick-start paths for Wazuh. Here is
-the real troubleshooting trail and the fix — the kind of thing that never shows
-up in a tutorial.
+Everything in this lab runs on an Apple Silicon Mac, so every VM is ARM64. That broke
+the two quick-start paths Wazuh documents. Here's what failed and what finally worked.
 
-## Attempt 1 — Docker single-node (the documented default) ❌
+## Try 1: the Docker single-node deploy
 
 ```bash
 git clone https://github.com/wazuh/wazuh-docker.git -b v4.9.0
@@ -14,23 +12,19 @@ docker compose -f generate-indexer-certs.yml run --rm generator
 docker compose up -d
 ```
 
-All three containers went into `Restarting (255)`. Logs:
+All three containers went straight into a restart loop. The logs said:
 
 ```
 wazuh.indexer-1  | exec /entrypoint.sh: exec format error
 wazuh.manager-1  | exec /init: exec format error
 ```
 
-**Diagnosis:** Wazuh's Docker images are published for `linux/amd64` only. On an
-ARM64 host with no QEMU binfmt layer installed, the amd64 binaries cannot execute
-at all — `exec format error`. Not a config issue; an architecture mismatch.
+`exec format error` means the CPU couldn't run the binary at all. Wazuh's images are
+built for amd64 only, and this host had no emulation layer, so there was nothing to
+translate the x86 instructions. Not a config problem, an architecture problem. Tore
+it down with `docker compose down -v`.
 
-Cleaned up:
-```bash
-docker compose down -v
-```
-
-## Attempt 2 — Installation assistant, 4.9 branch ❌
+## Try 2: the install script, 4.9
 
 ```bash
 curl -sO https://packages.wazuh.com/4.9/wazuh-install.sh
@@ -41,36 +35,32 @@ sudo bash wazuh-install.sh -a -i
 ERROR: Uncompatible system. This script must be run on a 64-bit system.
 ```
 
-**Diagnosis:** two separate problems.
-1. The 4.9 assistant's arch check only accepts `x86_64` and wrongly rejects
-   `aarch64` (which *is* 64-bit).
-2. Even bypassing that, Wazuh only publishes **arm64** packages for
-   `wazuh-indexer` and `wazuh-dashboard` from **4.12.0 onward**. 4.9.2 arm64
-   simply does not exist for those two components — only `wazuh-manager` does.
+That check is wrong (aarch64 is 64-bit), but there was a second, real problem too:
+Wazuh only publishes ARM64 packages for the indexer and dashboard from version 4.12
+onward. On 4.9 those two components don't exist for ARM64, only the manager does. I
+confirmed it against the repo:
 
-Verified against the repo:
 ```bash
 curl -s https://packages.wazuh.com/4.x/apt/dists/stable/main/binary-arm64/Packages \
   | grep -E "wazuh-(indexer|dashboard|manager)"
-# indexer/dashboard arm64 start at 4.12.0; manager has full history
 ```
 
-## Attempt 3 — Installation assistant, 4.14 branch ✅
+## Try 3: the install script, 4.14
 
-The newer assistant already supports ARM64 natively (it detects `aarch64` and
-pulls arm64 packages), and 4.14.7 has arm64 builds of all three components.
+The newer assistant detects aarch64 and pulls ARM64 packages, and 4.14.7 has ARM64
+builds of all three components:
 
 ```bash
 curl -sO https://packages.wazuh.com/4.14/wazuh-install.sh
-sudo bash wazuh-install.sh -a -i        # -a all-in-one, -i skip hardware checks
+sudo bash wazuh-install.sh -a -i
 ```
 
-Installs `wazuh-indexer`, `wazuh-manager` + Filebeat, and `wazuh-dashboard`
-natively — no emulation.
+Installed the indexer, manager, Filebeat, and dashboard natively. No emulation,
+cluster came up green.
 
-## Takeaways
+## What I'd tell the next person on Apple Silicon
 
-- On Apple Silicon, **skip Wazuh Docker** — the images are amd64-only.
-- Use the **4.14+ installation assistant**, which is arm64-aware.
-- Always check the package repo for your architecture before committing to a
-  version; component arch support is not uniform across releases.
+- Skip the Wazuh Docker images. They're amd64 only.
+- Use the 4.14 (or newer) install assistant.
+- Component ARM64 support isn't uniform across versions, so check the package repo for
+  your architecture before you pick a version.

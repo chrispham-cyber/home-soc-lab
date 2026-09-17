@@ -1,37 +1,30 @@
-# Attack 01 — Network Scan (MITRE T1595 / T1046)
+# 01 - Network scan (nmap)
 
-## Objective
-Discover open ports/services on the victims and see how the SIEM reacts.
+MITRE: T1595 / T1046
 
-## Attack (from Kali)
+## What I ran (from Kali)
+
 ```bash
 nmap -sT -sV --top-ports 50 -T4 192.168.3.131 192.168.3.132
 ```
 
-Results: both hosts up. On Ubuntu, nmap fingerprinted the Wazuh dashboard on
-443 (HTTP 302 → /app/login, `osd-name: ubuntu-VMware20-1`). On Windows, open
-services enumerated.
+Both hosts came back up. On Ubuntu it fingerprinted the Wazuh dashboard on 443 (a 302
+redirect to `/app/login`). On Windows it enumerated the open services.
 
-## Detections observed in Wazuh
+## What Wazuh caught
 
-**None specific to the scan.** This is an honest and important finding.
+Nothing. No alert for the scan at all.
 
-## Why nothing fired — and what it teaches
+## Why
 
-Wazuh is a **host-based** SIEM/EDR. It sees process, file, and log activity on
-the endpoints, but it has **no network sensor**, so a stealthy TCP scan that
-never touches a monitored log or process generates nothing to alert on. Without
-one of:
-- host **firewall logging** shipped to Wazuh, or
-- a **network IDS** (e.g. Suricata) feeding alerts,
+I expected at least something, but it makes sense once you think about where Wazuh
+sits. It's host-based: it watches processes, files, and logs on the endpoints. A TCP
+scan from another machine never runs a process or writes a log on the target, so
+there's nothing for Wazuh to key off of. Without host firewall logs being shipped in,
+or a network IDS feeding it, scans are a blind spot.
 
-port scans are a blind spot.
+## Fixing it later
 
-## Follow-up / roadmap
-Add **Suricata** on a mirror/monitor interface and forward its `eve.json` to
-Wazuh. Then a scan trips Suricata signatures (e.g. `ET SCAN` rules) which Wazuh
-ingests — closing this gap. Documented as future work.
-
-**Takeaway for interviews:** knowing *what your tooling cannot see* is as
-valuable as knowing what it can. A host-based stack needs a network layer for
-full coverage.
+Put Suricata on a monitoring interface and forward its `eve.json` into Wazuh. Then a
+scan trips Suricata signatures and those show up as Wazuh alerts. Noting it here as
+the next thing to add rather than pretending the coverage is there.

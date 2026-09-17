@@ -1,31 +1,35 @@
-# Detection Rules
+# Detection rules
 
-Custom rules I wrote to catch attacks the default ruleset missed.
+Custom Wazuh rules I wrote for this lab. On the server these live in
+`/var/ossec/etc/rules/local_rules.xml`; I keep a copy here in version control.
 
-## Wazuh custom rules
-Wazuh local rules live on the server at `/var/ossec/etc/rules/local_rules.xml`.
-Keep a copy of anything you write here so it is version-controlled.
+## What's here
 
-Example skeleton (`local_rules.xml`):
-```xml
-<group name="local,custom,">
-  <!-- Example: alert on many failed SSH logins in a short window -->
-  <rule id="100001" level="10" frequency="8" timeframe="120">
-    <if_matched_sid>5716</if_matched_sid>
-    <description>Custom: possible SSH brute force (8+ failures in 120s)</description>
-    <mitre>
-      <id>T1110</id>
-    </mitre>
-  </rule>
-</group>
-```
+`local_rules.xml` currently has one rule:
 
-## Sigma rules (portable)
-For rules you want to be SIEM-agnostic, write them in [Sigma](https://github.com/SigmaHQ/sigma)
-YAML under `sigma/` and note which SIEMs you converted them for.
+| ID     | Detects              | MITRE | Status              |
+|--------|----------------------|-------|---------------------|
+| 100010 | `whoami.exe` executed| T1033 | tested, confirmed firing |
 
-## Rule index
+Rule IDs from 100000 up are the range Wazuh reserves for user-defined rules.
 
-| ID / file | Detects | ATT&CK | Tested |
-|-----------|---------|--------|--------|
-| 100010 (`local_rules.xml`) | whoami.exe execution | T1033 | ✅ confirmed firing |
+## Why this one
+
+Running the Windows attack script, almost everything got picked up by the default
+ruleset. `whoami` didn't, even though it's classic early recon. It only showed up as a
+generic Sysmon process-creation event. The rule matches that event where the image is
+`whoami.exe` and raises a real alert mapped to T1033. See
+[../attacks/03-windows-discovery-execution.md](../attacks/03-windows-discovery-execution.md)
+for the before/after.
+
+## Deploy and test loop
+
+1. Edit `local_rules.xml` on the manager.
+2. `sudo /var/ossec/bin/wazuh-control restart`
+3. Re-run the technique on the endpoint.
+4. Check the alert shows up with the new rule ID.
+
+## Next
+
+Move rules toward [Sigma](https://github.com/SigmaHQ/sigma) so they aren't locked to
+Wazuh, and add rules for the techniques currently only caught at low severity.
