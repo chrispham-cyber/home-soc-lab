@@ -26,6 +26,8 @@ Sysmon plus Wazuh would catch. The script is in
 Windows Defender's ASR blocked the certutil download ("Access is denied"), which is
 its own signal. Wazuh still logged the dropped-file event.
 
+![Threat Hunting overview for the Windows agent](../screenshots/threathunting.png)
+
 ## The one it missed, and the rule I wrote
 
 `whoami` is one of the first things an attacker runs, but the default rules only logged
@@ -50,3 +52,7 @@ level: 8
 mitre: T1033 (Discovery, System Owner/User Discovery)
 image: C:\Windows\System32\whoami.exe
 ```
+
+The custom rule (100010) showing up in the events list next to the built-in ones:
+
+![Events list with the custom whoami rule firing](../screenshots/events.png)
