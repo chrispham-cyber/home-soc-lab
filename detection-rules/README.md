@@ -28,4 +28,4 @@ YAML under `sigma/` and note which SIEMs you converted them for.
 
 | ID / file | Detects | ATT&CK | Tested |
 |-----------|---------|--------|--------|
-| 100001    | SSH brute force | T1110 | ⬜ |
+| 100010 (`local_rules.xml`) | whoami.exe execution | T1033 | ✅ confirmed firing |

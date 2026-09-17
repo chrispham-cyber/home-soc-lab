@@ -47,11 +47,13 @@ home-soc-lab/
 
 | Tactic              | Technique                    | Attack file | Detected? |
 |---------------------|------------------------------|-------------|-----------|
-| Reconnaissance      | Active Scanning (T1595)      | [01](attacks/01-nmap-scan.md) | ⬜ |
-| Credential Access   | Brute Force (T1110)          | [02](attacks/02-ssh-bruteforce.md) | ⬜ |
-| Execution           | Command & Scripting (T1059)  | [03](attacks/03-reverse-shell.md) | ⬜ |
-
-_(Fill in ✅ as you complete each one.)_
+| Reconnaissance      | Active Scanning (T1595)      | [01](attacks/01-nmap-scan.md) | ⬜ (pending Kali) |
+| Credential Access   | Brute Force (T1110)          | [02](attacks/02-ssh-bruteforce.md) | ⬜ (pending Kali) |
+| Execution           | PowerShell / cmd (T1059)     | [04](attacks/04-windows-discovery-execution.md) | ✅ 92004/92032/92057 |
+| Execution           | Encoded PowerShell (T1059.001)| [04](attacks/04-windows-discovery-execution.md) | ✅ 92057 (lvl 12) |
+| Discovery           | Account Discovery (T1087)    | [04](attacks/04-windows-discovery-execution.md) | ✅ 92031 |
+| Discovery           | System Owner/User (T1033)    | [04](attacks/04-windows-discovery-execution.md) | ✅ **custom 100010** |
+| Ingress Tool Xfer   | certutil download (T1105)    | [04](attacks/04-windows-discovery-execution.md) | ✅ 92213 (lvl 15) |
 
 ## Status
 
