@@ -57,8 +57,9 @@ _(Fill in ✅ as you complete each one.)_
 
 - [x] Network: full-mesh connectivity across all 3 VMs
 - [x] Wazuh SIEM deployed (native ARM64, all services green)
-- [ ] Agents enrolled (Windows + Sysmon, Ubuntu)
-- [ ] Attacks executed + detections written
+- [x] Agents enrolled: Windows (Sysmon + agent, Active) + Ubuntu server (agent 000)
+- [x] Sysmon telemetry flowing; built-in detections firing
+- [ ] Attacks executed from Kali + custom detections written
 - [ ] Write-up published
 
 🚧 In progress — see [docs/setup.md](docs/setup.md) for current step.

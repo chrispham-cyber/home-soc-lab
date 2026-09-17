@@ -40,10 +40,15 @@ Installs indexer + manager + Filebeat + dashboard natively (no emulation).
 
 ## 3. Deploy agents
 
-- [ ] Wazuh agent installed on Windows 11
-- [ ] Wazuh agent installed on Ubuntu victim
-- [ ] Sysmon installed on Windows with SwiftOnSecurity config
-- [ ] Confirm all agents show "Active" in the dashboard
+- [x] Wazuh agent installed on Windows 11 (x86 MSI runs on ARM64 via emulation)
+      enrolled to manager 192.168.3.132 as `windows-victim`
+- [x] Ubuntu server self-monitored as agent 000 (no separate agent — the manager
+      would conflict with itself on /var/ossec; it already reads journald/syslog)
+- [x] Sysmon installed on Windows (ARM64 `Sysmon64a.exe`) with SwiftOnSecurity config
+- [x] Sysmon eventchannel wired into agent `ossec.conf`:
+      `<location>Microsoft-Windows-Sysmon/Operational</location>` / `eventchannel`
+- [x] Both agents show **Active**; Sysmon detections already firing
+      (e.g. rule 92205 "Powershell created executable in Windows root")
 
 ## 4. Run attacks + build detections
 
