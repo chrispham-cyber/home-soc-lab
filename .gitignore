@@ -1,0 +1,14 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Never commit secrets, certs, or captured samples
+*.pem
+*.key
+certs/
+*.pcap
+samples/
+malware/
+
+# Keep large raw logs out of git
+*.log
