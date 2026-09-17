@@ -23,19 +23,19 @@ progress tracker and the source material for the write-up.
 
 ## 2. Install Wazuh (on the Ubuntu server VM)
 
-```bash
-# Install Docker if needed
-sudo apt update && sudo apt install -y docker.io docker-compose-v2
-sudo usermod -aG docker $USER   # then log out/in
+> **This lab is on Apple Silicon → ARM64.** Docker and the 4.9 assistant both
+> fail on ARM64 (see [02-wazuh-install-arm64.md](02-wazuh-install-arm64.md)).
+> The working path is the **4.14 installation assistant**, which is arm64-aware.
 
-# Deploy Wazuh single-node
-git clone https://github.com/wazuh/wazuh-docker.git -b v4.9.0
-cd wazuh-docker/single-node
-docker compose -f generate-indexer-certs.yml run --rm generator
-docker compose up -d
+```bash
+curl -sO https://packages.wazuh.com/4.14/wazuh-install.sh
+sudo bash wazuh-install.sh -a -i     # -a all-in-one, -i skip hardware checks
 ```
 
-- [ ] Dashboard reachable at `https://<ubuntu-ip>`
+Installs indexer + manager + Filebeat + dashboard natively (no emulation).
+
+- [x] Dashboard reachable at `https://192.168.3.132` (admin / see install output)
+- [x] All services active; indexer cluster health = green
 - [ ] Changed default admin password
 
 ## 3. Deploy agents

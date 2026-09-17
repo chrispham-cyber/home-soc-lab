@@ -55,4 +55,10 @@ _(Fill in ✅ as you complete each one.)_
 
 ## Status
 
+- [x] Network: full-mesh connectivity across all 3 VMs
+- [x] Wazuh SIEM deployed (native ARM64, all services green)
+- [ ] Agents enrolled (Windows + Sysmon, Ubuntu)
+- [ ] Attacks executed + detections written
+- [ ] Write-up published
+
 🚧 In progress — see [docs/setup.md](docs/setup.md) for current step.
