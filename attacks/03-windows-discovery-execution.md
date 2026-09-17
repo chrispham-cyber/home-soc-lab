@@ -1,8 +1,6 @@
 # 03 - Windows discovery and execution
 
-Ran a handful of common post-compromise techniques on the Windows box to see what
-Sysmon plus Wazuh would catch. The script is in
-[../scripts/attack-sim.ps1](../scripts/attack-sim.ps1).
+Ran a handful of common post-compromise techniques on the Windows box to see what Sysmon plus Wazuh would catch. The script is in [attack-sim.ps1](../scripts/attack-sim.ps1).
 
 ## What I ran
 
@@ -10,7 +8,7 @@ Sysmon plus Wazuh would catch. The script is in
 - `systeminfo` (system info discovery)
 - `ipconfig /all`, `arp -a` (network discovery)
 - `powershell -EncodedCommand <base64>` (encoded PowerShell)
-- `certutil -urlcache -split -f https://example.com/file.txt out.txt` (download a file with a living-off-the-land binary)
+- `certutil -urlcache -split -f https://example.com/file.txt out.txt` 
 
 ## What Wazuh caught
 
@@ -23,16 +21,13 @@ Sysmon plus Wazuh would catch. The script is in
 | 92036  | 3     | net.exe started by a shell                             | T1059.003        |
 | 92004  | 4     | PowerShell spawned a command shell                     | T1059.003        |
 
-Windows Defender's ASR blocked the certutil download ("Access is denied"), which is
-its own signal. Wazuh still logged the dropped-file event.
+Windows Defender's ASR blocked the certutil download ("Access is denied"), which is its own signal. Wazuh still logged the dropped-file event.
 
 ![Threat Hunting overview for the Windows agent](../screenshots/threathunting.png)
 
 ## The one it missed, and the rule I wrote
 
-`whoami` is one of the first things an attacker runs, but the default rules only logged
-it as a plain process-creation event with no alert. So I wrote a rule for it
-(full file in [../detection-rules/local_rules.xml](../detection-rules/local_rules.xml)):
+`whoami` is one of the first things an attacker runs, but the default rules only logged it as a plain process-creation event with no alert. So I wrote a rule for it [Local Rules](../detection-rules/local_rules.xml):
 
 ```xml
 <rule id="100010" level="8">
@@ -43,8 +38,7 @@ it as a plain process-creation event with no alert. So I wrote a rule for it
 </rule>
 ```
 
-Dropped it into the manager's `local_rules.xml`, restarted with
-`wazuh-control restart`, ran `whoami` again, and confirmed my rule fired:
+Dropped it into the manager's `local_rules.xml`, restarted with `wazuh-control restart`, ran `whoami` again, and confirmed my rule fired:
 
 ```
 desc:  Custom: whoami.exe executed - System Owner/User Discovery (T1033)

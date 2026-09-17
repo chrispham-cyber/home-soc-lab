@@ -1,8 +1,6 @@
 # Home SOC Lab
 
-A small security operations lab I built to learn detection engineering by doing it:
-stand up a SIEM, put an endpoint under monitoring, attack it, and see what gets
-caught. When the default rules missed something, I wrote and tested my own.
+A small security operations lab I built to learn detection engineering by doing it: stand up a SIEM, put an endpoint under monitoring, attack it, and see what gets caught. When the default rules missed something, I wrote and tested my own.
 
 Author: Chris Pham ([chrispham-cyber.github.io](https://chrispham-cyber.github.io))
 
@@ -10,9 +8,7 @@ Author: Chris Pham ([chrispham-cyber.github.io](https://chrispham-cyber.github.i
 
 ## Setup
 
-Three VMs on VMware Fusion, on an isolated NAT network. Everything runs on Apple
-Silicon, so all the guests are ARM64 (which caused most of the interesting problems,
-see [docs/02-wazuh-install-arm64.md](docs/02-wazuh-install-arm64.md)).
+Three VMs on VMware Fusion, on an isolated NAT network. Everything runs on Apple Silicon, so all the guests are ARM64 (which caused most of the interesting problems, see [Wazuh ARM64](docs/02-wazuh-install-arm64.md)).
 
 ```
  Kali (.135)  ── attacks ──►  Windows 11 (.131)   Sysmon + Wazuh agent
@@ -49,13 +45,11 @@ writeups/          the long-form post
 | Ingress Tool Xfer | certutil download (T1105)       | caught: rule 92213, level 15            |
 | Discovery         | Account Discovery (T1087)       | caught: rule 92031                      |
 | Discovery         | System Owner/User (T1033)       | not caught by default, so I wrote rule 100010 |
-| Reconnaissance    | Active Scanning (T1595)         | not caught, and here's why: [attacks/01](attacks/01-nmap-scan.md) |
+| Reconnaissance    | Active Scanning (T1595)         | not caught, and here's why: [attacks](attacks/01-nmap-scan.md) |
 
-See the [attacks/](attacks/) folder for the exact commands and the alerts they
+See the [attacks](attacks/) folder for the exact commands and the alerts they
 produced.
 
 ## Where it stands
 
-Working end to end: SIEM is up, both agents report in, attacks generate real alerts,
-and my custom rule fires. The nmap blind spot is documented rather than hidden, and
-adding Suricata for network coverage is the obvious next step.
+Working end to end: SIEM is up, both agents report in, attacks generate real alerts, and my custom rule fires. The nmap blind spot is documented rather than hidden, and adding Suricata for network coverage is the obvious next step.

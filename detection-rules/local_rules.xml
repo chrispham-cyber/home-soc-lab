@@ -1,17 +1,5 @@
-<!--
-  Custom Wazuh detection rules for the Home SOC Lab.
-  Deployed to the manager at: /var/ossec/etc/rules/local_rules.xml
-  Rule IDs 100000+ are reserved for user-defined rules.
--->
 <group name="local,sysmon,attack,">
 
-  <!--
-    Custom detection: whoami.exe execution.
-    The default ruleset logs Sysmon process creation but does not raise a
-    dedicated alert for `whoami`, a very common early reconnaissance action.
-    This rule flags it and maps it to MITRE T1033.
-    Tested: firing confirmed on agent 001 (windows-victim), level 8.
-  -->
   <rule id="100010" level="8">
     <if_group>sysmon_event1</if_group>
     <field name="win.eventdata.image" type="pcre2">(?i)\\whoami\.exe$</field>

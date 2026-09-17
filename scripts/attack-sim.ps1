@@ -1,4 +1,3 @@
-# Home SOC Lab - Windows attack simulation (safe, self-contained)
 Write-Host "[T1033/T1087] Account/User discovery"
 cmd /c "whoami /all" | Out-Null
 cmd /c "net user" | Out-Null
