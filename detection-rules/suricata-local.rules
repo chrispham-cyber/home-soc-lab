@@ -1,8 +1,1 @@
-# Custom Suricata rule for the Home SOC Lab.
-# On the server this lives at: /var/lib/suricata/rules/local.rules
-#
-# The ET Open ruleset did not fire on a plain internal -sT scan, so this catches the
-# scan by behavior: 30+ SYN packets from one source in 10 seconds. Confirmed firing on
-# an nmap scan from Kali, and ingested by Wazuh as rule 86601.
-
 alert tcp any any -> $HOME_NET any (msg:"LOCAL SCAN Possible TCP port scan (30+ SYN from one source in 10s)"; flags:S; flow:to_server; threshold:type both, track by_src, count 30, seconds 10; classtype:attempted-recon; sid:1000001; rev:1;)

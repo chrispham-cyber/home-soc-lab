@@ -20,7 +20,7 @@ Kali  --scan-->  Ubuntu (ens160)
 ## Install (ARM64 Ubuntu)
 ```bash
 sudo apt-get install -y suricata
-sudo suricata-update            # pulls the ET Open ruleset (~53k rules)
+sudo suricata-update
 ```
 
 ## Config
@@ -40,7 +40,7 @@ alert tcp any any -> $HOME_NET any (msg:"LOCAL SCAN Possible TCP port scan (30+ 
 
 Validate and start:
 ```bash
-sudo suricata -T -c /etc/suricata/suricata.yaml   # config test
+sudo suricata -T -c /etc/suricata/suricata.yaml
 sudo systemctl enable --now suricata
 ```
 
