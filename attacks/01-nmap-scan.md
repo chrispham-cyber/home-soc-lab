@@ -18,6 +18,9 @@ Nothing. No alert for the scan at all.
 
 I expected at least something, but it makes sense once you think about where Wazuh sits. It's host-based: it watches processes, files, and logs on the endpoints. A TCP scan from another machine never runs a process or writes a log on the target, so there's nothing for Wazuh to key off of. Without host firewall logs being shipped in, or a network IDS feeding it, scans are a blind spot.
 
-## Fixing it later
+## Update: closed with Suricata
 
-Put Suricata on a monitoring interface and forward its `eve.json` into Wazuh. Then a scan trips Suricata signatures and those show up as Wazuh alerts. Noting it here as the next thing to add rather than pretending the coverage is there.
+I later added Suricata as a network IDS on the Ubuntu host and fed its `eve.json` into
+Wazuh. Re-running this scan now fires a detection: my custom Suricata threshold rule,
+ingested by Wazuh as rule 86601. Full write-up in
+[../docs/03-suricata-ids.md](../docs/03-suricata-ids.md).

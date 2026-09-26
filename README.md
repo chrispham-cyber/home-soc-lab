@@ -15,6 +15,7 @@ Three VMs on VMware Fusion, on an isolated NAT network. Everything runs on Apple
   attacker                          │
                                     ▼
                            Ubuntu (.132)  ── Wazuh server: indexer + manager + dashboard
+                                             + Suricata IDS (network alerts -> Wazuh)
                                              also monitors itself as agent 000
 ```
 
@@ -22,13 +23,13 @@ Three VMs on VMware Fusion, on an isolated NAT network. Everything runs on Apple
 |------------|-------|-------------------|------------------------------------|
 | Kali       | .135  | Attacker          | nmap, hydra                        |
 | Windows 11 | .131  | Monitored endpoint| Sysmon (SwiftOnSecurity), Wazuh agent |
-| Ubuntu     | .132  | SIEM server       | Wazuh 4.14 (native install)        |
+| Ubuntu     | .132  | SIEM server + IDS | Wazuh 4.14 (native) + Suricata IDS |
 
 ## What's in here
 
 ```
 docs/              build notes + the ARM64 troubleshooting write-up
-detection-rules/   the custom rule I wrote (local_rules.xml)
+detection-rules/   the custom rules I wrote (Wazuh local_rules.xml + Suricata)
 attacks/           each attack I ran and what Wazuh did (or didn't) catch
 scripts/           the PowerShell I used on the Windows box
 screenshots/       dashboard evidence
@@ -45,11 +46,11 @@ writeups/          the long-form post
 | Ingress Tool Xfer | certutil download (T1105)       | caught: rule 92213, level 15            |
 | Discovery         | Account Discovery (T1087)       | caught: rule 92031                      |
 | Discovery         | System Owner/User (T1033)       | not caught by default, so I wrote rule 100010 |
-| Reconnaissance    | Active Scanning (T1595)         | not caught, and here's why: [attacks](attacks/01-nmap-scan.md) |
+| Reconnaissance    | Active Scanning (T1595)         | caught via Suricata IDS -> Wazuh rule 86601 ([attacks](attacks/01-nmap-scan.md), [docs](docs/03-suricata-ids.md)) |
 
 See the [attacks](attacks/) folder for the exact commands and the alerts they
 produced.
 
 ## Where it stands
 
-Working end to end: SIEM is up, both agents report in, attacks generate real alerts, and my custom rule fires. The nmap blind spot is documented rather than hidden, and adding Suricata for network coverage is the obvious next step.
+Working end to end: SIEM is up, both agents report in, attacks generate real alerts, and my custom rules fire. The nmap blind spot from Attack 01 is now closed with a Suricata network IDS feeding alerts into Wazuh, so the lab has both host and network visibility.
